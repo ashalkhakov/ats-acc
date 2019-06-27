@@ -148,7 +148,11 @@ parse_three(xs) = let
             ) 
           | tok_ide_eq(e, "symbol")        => @(x0, x1, ERRsymbol(x2))
           | tok_ide_eq(e, "constructor")   => @(x0, x1, ERRcstpat(x2))
-          (* | tok_ide_eq(e, "linear")   => @(x0, x1, ERRcstpat(x2)) *)
+          | tok_ide_eq(e, "linear")        => (
+              ifcase
+              | tok_ide_eq(y, "dynamic")   => @(x0, x1, ERRlincp(x2))
+              | (*else*)_                  => @(x0, x1, ERRother(x2))
+            )
           | (*else*)_                      => @(x0, x1, ERRdynexp(x2))
         )
       | tok_ide_eq(h, "unsolved")          => @(x0, x1, ERRunsolv(x2))

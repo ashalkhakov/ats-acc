@@ -684,6 +684,53 @@ end
 implement{}
 print_unit(): void = print "ERRunit"
 
+implement{}
+print_lincp
+(xs, color, verbose) = let
+  // error(3): the linear dynamic variable [...] needs to be ....
+
+  val (error, xs0) = takeskip_until_free(xs, lam x => is_col(x))
+  val xs1 = skip_until_free(xs0, lam x => is_ide(x))
+  val (error_statement, xs2) = takeskip_until_free(xs1, lam x => is_osq(x))
+  val (dynvar, xs3) = peek_square_list_osq(xs2)
+  val (pc1, xs4) = takeskip_until_free(xs3, lam x => tok_ide_eq(x, "preserved") || tok_ide_eq(x, "consumed"))
+
+  val h = get_token_n_ide(xs4, 0)
+  val consumed = tok_ide_eq(h, "consumed")
+  val () = free_token(h)
+  val pc = skip_while_free(pc1, lam i => is_spc(i))
+in
+(
+  print_error (error, color);
+  print_after_error3;
+  print_toks_free_nonewln(error_statement);
+  print_after_message("");
+
+  print "[ ";
+  simplify_print(dynvar, color, verbose);
+  print " ]";
+  print_after_message("");
+  
+  print_toks_free_nonewln(pc);
+  if consumed then let
+    val (hs, ts) = takeskip_until_free(xs4, lam x => is_osq(x))
+    val (s2e, ts21) = peek_square_list_osq(ts)
+    val ts2 = skip_while_free(ts21, lam i => is_spc(i))
+  in
+    print_toks_free_nonewln(hs);
+
+    print_after_message("");
+    print "[ ";
+    simplify_print(s2e, color, verbose);
+    print " ]";
+    print_after_message("");
+      
+    print_toks_free_nonewln(ts2)
+  end else print_toks_free_nonewln(xs4);
+  
+  print_after_all
+)
+end
 
 (* ****** ****** *)
 
