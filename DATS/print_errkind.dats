@@ -684,6 +684,52 @@ end
 implement{}
 print_unit(): void = print "ERRunit"
 
+implement{}
+print_ssort
+(xs, color, verbose) = let
+  // the static expression
+  //
+  //   [, s2e, ] is expected to be of a functional sort but is assigned sort [, s2e, ]
+  //   is of the sort [, s2e, ] but it is expected to be the sort [, s2e, ]
+  val (err, rest1) = takeskip_until_in_free(xs, lam i => is_col(i))
+  
+  val rest = skip_while_free (rest1, lam i => is_spc(i))  
+  val (bef, aft) = takeskip_until_free (rest, lam i => is_osq i)
+
+  val (exp_sort, aft) = peek_square_list_osq (aft)
+  val _is = get_token_n_ide (aft, 0)
+  val exp_of = get_token_n_ide (aft, 1)  
+
+  val (txt1, aft) = takeskip_until_free (aft, lam i => is_osq i)
+  val txt = skip_while_free (txt1, lam i => is_spc(i))
+  val (expected, aft) = peek_square_list_osq (aft)
+in
+  print_error(err, color);
+
+  free_token(_is);
+  free_token(exp_of);
+  print_toks_free_nonewln(bef);
+
+  print_after_message("");
+            
+  print "[ ";
+  simplify_print(exp_sort, color, verbose);
+  print " ]";
+            
+  print_after_message("");
+            
+  print_toks_free_nonewln(txt);
+            
+  print_after_message("");
+            
+  print "[ ";
+  simplify_print(expected, color, verbose);
+  print " ]";
+            
+  print_toks_free_nonewln(aft);
+         
+  print_after_all;
+end
 
 (* ****** ****** *)
 

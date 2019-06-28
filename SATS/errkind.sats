@@ -23,6 +23,8 @@ datavtype errkind =
   | ERRlast   of toktup // the summary i.e. "exit(ATS): ..."
   | ERRunit   of () 
 //(*
+  | ERRssort of toks   // the static expression [...] is expected to be of functional sort but it is assigned the sort [...]
+                       // the static expression [...] is of the sort [...] but it is expected to be of the sort [...]
   | ERRsimpre of toks  // the static expression needs to be impredicative 
                          // but it is assigned the sort [...].
 //*)

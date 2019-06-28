@@ -26,7 +26,7 @@ all::
 #
 
 all:: ; make -C $(DIR) && printf "$?" && echo "Build Successful" \
-|| printf "\nBuilding acc Failed\n" 
+|| printf "\nBuilding acc Failed\n"
 all:: ; [ -f "./DATS/acc" ] && mv ./DATS/acc .
 
 #
@@ -66,7 +66,7 @@ testrun:: ; @printf "\e[33mbuilding...\e[0m\n"
 testrun:: test0
 testrun:: ; @printf "\e[36mrunning tests... \e[0m\n" && printf "\e[36m>>>\e[0m\n"
 testrun:: ; @printf "Each test will output the current error message (with patscc) and the corresponding pretty-printed message (with acc)\n"
-testrun:: ; -@sh ./TEST/tests.sh
+testrun:: ; -@bash ./TEST/tests.sh
 
 ######
 

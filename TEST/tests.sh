@@ -5,6 +5,7 @@ files=( "./TEST/cfail.dats"
 	# "./TEST/fail2.dats"
 	"./TEST/list0_tests.dats"
 	"./TEST/show6.dats"
+        "./TEST/s2e_funsort.dats"
       )
 
 ESC_CODE="\e["
@@ -127,12 +128,12 @@ valgrind_message_patscc="
 ==20540== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
 ==20540== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
 ==20540== Command: patscc -tcats ./TEST/failure.dats
-==20540== 
-==20540== 
+==20540==
+==20540==
 ==20540== HEAP SUMMARY:
 ==20540==     in use at exit: 95 bytes in 6 blocks
 ==20540==   total heap usage: 12 allocs, 6 frees, 1,199 bytes allocated
-==20540== 
+==20540==
 ==20540== LEAK SUMMARY:
 ==20540==    definitely lost: 15 bytes in 1 blocks
 ==20540==    indirectly lost: 0 bytes in 0 blocks
@@ -140,7 +141,7 @@ valgrind_message_patscc="
 ==20540==    still reachable: 80 bytes in 5 blocks
 ==20540==         suppressed: 0 bytes in 0 blocks
 ==20540== Rerun with --leak-check=full to see details of leaked memory
-==20540== 
+==20540==
 ==20540== For counts of detected and suppressed errors, rerun with: -v
 ==20540== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 "
@@ -150,14 +151,14 @@ valgrind_message_acc="
 ==20543== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
 ==20543== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
 ==20543== Command: ./acc -tcats ./TEST/failure.dats
-==20543== 
-==20543== 
+==20543==
+==20543==
 ==20543== HEAP SUMMARY:
 ==20543==     in use at exit: 0 bytes in 0 blocks
 ==20543==   total heap usage: 1,140 allocs, 1,140 frees, 35,594 bytes allocated
-==20543== 
+==20543==
 ==20543== All heap blocks were freed -- no leaks are possible
-==20543== 
+==20543==
 ==20543== For counts of detected and suppressed errors, rerun with: -v
 ==20543== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 "
@@ -171,7 +172,7 @@ show_valgrind_test() {
 
     if [ "$(get_status "valgrind")" -eq "0" ]; then
 	# if valgrind command exists
-	
+
 	print_two_colors "$BOLD" "$LIGHTMAGENTA"
 	printf "patscc"
 	print_color_close
@@ -195,7 +196,7 @@ show_valgrind_test() {
 
 	valgrind ./acc -tcats "$errs" | grep --color=none "^=="
 
-	echo 
+	echo
     else
 	echo "valgrind is not installed"
 	echo "the output would be similar to below"
@@ -216,7 +217,7 @@ show_valgrind_test() {
 	echo "$valgrind_message_acc"
     fi
     print_test_end "4"
-    echo "$valgrind_message"    
+    echo "$valgrind_message"
 }
 
 
@@ -231,8 +232,8 @@ print_end_all_test() {
 
 show_patscc_vs_acc_tests() {
     c=0
-    for (( c=0; c<=3; c++ ))
-    do  
+    for (( c=0; c<=4; c++ ))
+    do
 	print_test "$c"
 	echo
 	# echo "File: ${files[$c]}"

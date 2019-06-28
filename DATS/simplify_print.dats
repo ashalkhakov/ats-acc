@@ -696,18 +696,39 @@ implmnt(*{}*)
 simplify_S2RTbas
 (x0: token, xs0: toks, verbose: bool) : (toks, toks) = let
   // datatype s2rt = | S2RTbas of s2rtbas (* base sort *)
-// old version -- doesnt work really
-  val all = skip_until_in_free(xs0, lam i => is_sco(i))
-  val all = drop_exn_free(all, 0)
-  (* val res = take_until_free2(all, lam i => is_cpr(i)) *)
-  val (res, rest) = takeskip_until_free(all, lam i => is_cpr(i))
-  val rest = drop_exn_free(rest,1)
-  val () = free_token(x0)
-  (* val res = cons_vt(x0, xs0) *)
-  (* val rest = nil_vt() *)
-  
+  val knd = get_token_at_unsafe (xs0, 1)
 in
-  (res, rest)
+  ifcase
+  | tok_s2e_eq(knd, "S2RTBASimp") => let
+      val all = skip_until_in_free(xs0, lam i => is_sco(i))
+      val all = drop_exn_free(all, 0)
+      val (res, rest) = takeskip_until_free(all, lam i => is_cpr(i))
+      val rest = drop_exn_free(rest,1)
+      val () = free_token(x0)
+      val () = free_token(knd)
+    in
+      (res, rest)
+    end
+ | tok_s2e_eq(knd, "S2RTBASpre") => let
+      val all = skip_until_in_free(xs0, lam i => is_opr(i))
+      val all = drop_exn_free(all, 0)
+      val (res, rest) = peek_paren_list_opr(all)
+      
+      val name = get_token_at_unsafe(res, 1)
+      val () = free_toks (res)
+      val res = cons_vt(name, nil_vt())
+      
+      val rest = drop_exn_free(rest, 0)
+      val () = free_token(x0)
+      val () = free_token(knd)
+    in
+      (res, rest)
+    end
+ | (*S2RTBASdef*)_ => (
+    // TODO: handle this case too
+    print_toks(xs0);
+    free_token(x0); free_token(knd); (list_vt_nil(), xs0)
+  )
 end
 
 

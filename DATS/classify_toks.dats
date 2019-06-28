@@ -109,8 +109,14 @@ parse_two(xs) = let
       ifcase
       | tok_ide_eq(h, "the") &&
         tok_ide_eq(e, "static") &&
-        tok_ide_eq(y, "expression") => @(x0, x1, ERRsimpre(x2))
-      | _ => @(x0, x1, ERRexit2(x2))
+        tok_ide_eq(y, "expression") => (
+          
+          ifcase
+          | tok_ide_eq(hey, "is") => @(x0, x1, ERRssort(x2))
+          | tok_ide_eq(hey, "of") => @(x0, x1, ERRssort(x2))
+          | (*else*)_ => @(x0, x1, ERRsimpre(x2))
+        )
+      | _ => (print "exit2";@(x0, x1, ERRexit2(x2)))
     ): errtup
     val () = free_token3(h,e,y)
     val () = free_token(hey)  
